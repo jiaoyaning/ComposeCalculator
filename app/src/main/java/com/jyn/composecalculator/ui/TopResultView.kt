@@ -15,47 +15,38 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.apkfuns.logutils.LogUtils
 
 /**
  * 上层结果
  * Created by jiaoyaning on 2022/8/6.
  */
+enum class Status {
+    MIN, MAX
+}
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun TopResultView() {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-
     val topHeight = screenHeight * BOTTOM_FRACTION + 10.dp
-    val swipeableState = rememberSwipeableState(0)
-
-    val sizePx = with(LocalDensity.current) { -topHeight.toPx() }
-    val anchors = mapOf(0f to 0, sizePx to 1)
 
     Surface(
         modifier = Modifier
-            .padding(bottom = topHeight)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-
-//            .swipeable(
-//                state = swipeableState,
-//                anchors = anchors,
-//                thresholds = { _, _ -> FractionalThreshold(0.3f) },
-//                orientation = Orientation.Vertical
-//            )
-
-        shape = RoundedCornerShape(25.dp),
+            .width(screenWidth)
+            .height(screenHeight)
+            .offset(y = -topHeight),
+        shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
         tonalElevation = 3.dp
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text("TopResultView")
+            Text("TopResultView", fontSize = 22.sp)
         }
     }
 }
