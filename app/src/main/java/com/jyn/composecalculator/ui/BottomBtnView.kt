@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -20,12 +21,13 @@ import androidx.compose.ui.unit.sp
 private val numberColumns = listOf(
     listOf("C", "7", "4", "1", "%"),
     listOf("÷", "8", "5", "2", "0"),
-    listOf("x", "9", "6", "3", "."),
+    listOf("×", "9", "6", "3", "."),
     listOf("D", "-", "+", "="),
 )
 
 const val BOTTOM_FRACTION = 0.618f
 
+@Preview(showBackground = true)
 @Composable
 fun BottomBtnView() {
     Surface(
@@ -73,7 +75,9 @@ fun ItemBtn(text: String) {
             .fillMaxWidth()
             .fillMaxHeight(),
         shape = RoundedCornerShape(1000.dp),
-        onClick = { /*TODO*/ },
+        onClick = {
+
+        },
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(text = text, fontSize = 30.sp)
