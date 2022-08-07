@@ -3,9 +3,9 @@ package com.jyn.composecalculator.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.jyn.composecalculator.Greeting
 
 /**
  * 上层结果
@@ -15,6 +15,6 @@ import com.jyn.composecalculator.Greeting
 @Composable
 fun TopResultView() {
     Box(Modifier.background(MaterialTheme.colorScheme.onError)) {
-        Greeting("TopResultView")
+        Text("TopResultView")
     }
 }
