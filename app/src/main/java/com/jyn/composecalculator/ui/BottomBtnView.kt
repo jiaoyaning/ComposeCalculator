@@ -24,13 +24,15 @@ private val numberColumns = listOf(
     listOf("D", "-", "+", "="),
 )
 
+const val BOTTOM_FRACTION = 0.618f
+
 @Composable
 fun BottomBtnView() {
     Surface(
         Modifier
             .padding(bottom = 10.dp)
             .background(MaterialTheme.colorScheme.secondary)
-            .fillMaxHeight(0.618f)
+            .fillMaxHeight(BOTTOM_FRACTION)
             .fillMaxWidth()
     ) {
         Row( //数列
