@@ -24,6 +24,5 @@ fun ContentView() {
         contentAlignment = Alignment.BottomCenter
     ) {
         BottomBtnView()
-        TopResultView()
     }
 }

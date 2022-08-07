@@ -1,41 +1,64 @@
 package com.jyn.composecalculator.ui
 
+import android.graphics.Color
+import android.widget.Button
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jyn.composecalculator.Greeting
+import androidx.compose.ui.unit.sp
 
 /**
  * 底部按钮
  * Created by jiaoyaning on 2022/8/6.
  */
 private val numberColumns = listOf(
-    listOf("7", "4", "1", "0"),
-    listOf("8", "5", "2", "."),
-    listOf("9", "6", "3", "=")
+    listOf("C", "7", "4", "1", "%"),
+    listOf("÷", "8", "5", "2", "0"),
+    listOf("x", "9", "6", "3", "."),
+    listOf("D", "-", "+", "="),
 )
 
 @Composable
 fun BottomBtnView() {
     Surface(
         Modifier
+            .padding(bottom = 10.dp)
             .background(MaterialTheme.colorScheme.secondary)
-            .fillMaxHeight(0.8f)
+            .fillMaxHeight(0.618f)
             .fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(5.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+        Row( //数列
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             numberColumns.forEach { numberColumn ->
-                Column(modifier = Modifier.weight(1f)) {
-                    numberColumn.forEach { ItemBtn(it) }
+                Column( //横排
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxHeight()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    numberColumn.forEach {
+                        Box(
+                            modifier = Modifier
+                                .padding(bottom = 10.dp)
+                                .weight(if (it == "=") 2f else 1f)
+                        ) {
+                            ItemBtn(text = it)
+                        }
+                    }
                 }
             }
         }
@@ -44,9 +67,16 @@ fun BottomBtnView() {
 
 @Composable
 fun ItemBtn(text: String) {
-    IconButton(onClick = { /*TODO*/ }) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(text = text)
-        }
-    }
+    val modifier = if (text != "=") Modifier.aspectRatio(1f) else Modifier
+
+    Button(modifier = modifier
+        .fillMaxWidth()
+        .fillMaxHeight(),
+        shape = RoundedCornerShape(1000.dp),
+        onClick = { /*TODO*/ },
+        content = {
+            Box(contentAlignment = Alignment.Center) {
+                Text(text = text, fontSize = 30.sp)
+            }
+        })
 }
