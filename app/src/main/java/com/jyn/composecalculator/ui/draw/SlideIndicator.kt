@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.apkfuns.logutils.LogUtils
+import com.jyn.composecalculator.ui.theme.black1
 
 /**
  * 取值1..100
@@ -47,7 +48,7 @@ fun SlideIndicator(process: Float) {
         }
         drawPath(
             path = path,
-            color = Color.Blue,
+            color = black1,
             style = Stroke(
                 width = height.toPx(),
                 join = StrokeJoin.Round,

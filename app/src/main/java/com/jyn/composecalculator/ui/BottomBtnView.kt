@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.sp
  * Created by jiaoyaning on 2022/8/6.
  */
 private val numberColumns = listOf(
-    listOf("C", "7", "4", "1", "%"),
-    listOf("÷", "8", "5", "2", "0"),
-    listOf("×", "9", "6", "3", "."),
-    listOf("D", "-", "+", "="),
+    listOf("C", "7", "4", "1", "00"),
+    listOf("%", "8", "5", "2", "0"),
+    listOf("D", "9", "6", "3", "."),
+    listOf("÷", "×", "-", "+", "="),
 )
 
 const val BOTTOM_FRACTION = 0.618f
@@ -56,7 +56,7 @@ fun BottomBtnView() {
                         Box(
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
-                                .weight(if (it == "=") 2f else 1f)
+                                .weight(1f)
                         ) {
                             ItemBtn(text = it)
                         }
@@ -71,7 +71,7 @@ fun BottomBtnView() {
 fun ItemBtn(text: String) {
     val modifier = if (text != "=") Modifier.aspectRatio(1f) else Modifier
     Button(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(),
         shape = RoundedCornerShape(1000.dp),
