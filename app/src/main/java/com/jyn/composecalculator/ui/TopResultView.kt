@@ -1,13 +1,8 @@
 package com.jyn.composecalculator.ui
 
-import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.overscroll
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.rememberSwipeableState
@@ -16,18 +11,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.rotary.onPreRotaryScrollEvent
-import androidx.compose.ui.layout.MeasureResult
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
+import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.ui.draw.SlideIndicator
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -40,6 +32,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @Preview(showBackground = true)
 @Composable
 fun TopResultView() {
+    val viewModel = viewModel<DateViewModel>()
+    LogUtils.tag("viewModel").i("TopResultView viewModel : $viewModel")
+
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
@@ -64,7 +59,8 @@ fun TopResultView() {
                 thresholds = { _, _ -> FractionalThreshold(0.2f) },
             ),
         shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
-        tonalElevation = 3.dp
+        tonalElevation = 3.dp,
+        shadowElevation = 3.dp
     ) {
         Column(
             modifier = Modifier
@@ -78,7 +74,7 @@ fun TopResultView() {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                SlideIndicator(100 - (state.offset.value / blockSizePx * 100).toInt())
+                SlideIndicator(100 - (state.offset.value / blockSizePx * 100))
             }
         }
     }
