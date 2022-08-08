@@ -1,14 +1,26 @@
 package com.jyn.composecalculator.ui
 
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.material.swipeable
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.rotary.onPreRotaryScrollEvent
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,17 +28,13 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apkfuns.logutils.LogUtils
+import com.jyn.composecalculator.ui.draw.SlideIndicator
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * 上层结果
  * Created by jiaoyaning on 2022/8/6.
  */
-enum class Status {
-    MIN, MAX
-}
 
 @OptIn(ExperimentalMaterialApi::class, DelicateCoroutinesApi::class)
 @Preview(showBackground = true)
@@ -61,10 +69,17 @@ fun TopResultView() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(15.dp),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text("TopResultView", fontSize = 22.sp)
+            Text("TopResultView ${state.offset.value}", fontSize = 18.sp)
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                SlideIndicator(100 - (state.offset.value / blockSizePx * 100).toInt())
+            }
         }
     }
 }
