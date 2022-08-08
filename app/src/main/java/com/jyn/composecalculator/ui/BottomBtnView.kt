@@ -10,9 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jyn.composecalculator.DateViewModel
 
 /**
  * 底部按钮
@@ -25,7 +30,7 @@ private val numberColumns = listOf(
     listOf("÷", "×", "-", "+", "="),
 )
 
-const val BOTTOM_FRACTION = 0.618f
+const val BOTTOM_FRACTION = 0.67f
 
 @Preview(showBackground = true)
 @Composable
@@ -57,6 +62,7 @@ fun BottomBtnView() {
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
                                 .weight(1f)
+                                .aspectRatio(1f)
                         ) {
                             ItemBtn(text = it)
                         }
@@ -70,17 +76,33 @@ fun BottomBtnView() {
 @Composable
 fun ItemBtn(text: String) {
     val modifier = if (text != "=") Modifier.aspectRatio(1f) else Modifier
+    val viewModel = viewModel<DateViewModel>()
+
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(),
         shape = RoundedCornerShape(1000.dp),
-        onClick = {
-
-        },
+        contentPadding = PaddingValues(0.dp),
+        onClick = { textClick(viewModel, text) },
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(text = text, fontSize = 30.sp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text,
+                fontSize = 30.sp
+            )
         }
+    }
+}
+
+fun textClick(viewModel: DateViewModel, text: String) {
+    when (text) {
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00"
+        -> viewModel.append(text)
     }
 }

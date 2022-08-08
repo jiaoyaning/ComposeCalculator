@@ -3,16 +3,15 @@ package com.jyn.composecalculator.ui
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FractionalThreshold
-import androidx.compose.material.rememberSwipeableState
-import androidx.compose.material.swipeable
+import androidx.compose.material.*
+import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -28,7 +27,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
  * Created by jiaoyaning on 2022/8/6.
  */
 
-@OptIn(ExperimentalMaterialApi::class, DelicateCoroutinesApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun TopResultView() {
@@ -40,13 +39,13 @@ fun TopResultView() {
     val screenWidth = configuration.screenWidthDp.dp
     //偏移量
     val topHeight = screenHeight * BOTTOM_FRACTION + 10.dp
+    val textBoxHeight = screenHeight - topHeight
+    viewModel.textBoxHeight = textBoxHeight
 
     //记录是否是最小值
-    val state = rememberSwipeableState(true, confirmStateChange = {
-        LogUtils.tag("rememberSwipeableState").i("confirmStateChange: $it")
-        true
-    })
+    val state = rememberSwipeableState(true)
     val blockSizePx = with(LocalDensity.current) { -topHeight.toPx() }
+    val anchors = mapOf(0f to false, blockSizePx to true)
     Surface(
         modifier = Modifier
             .width(screenWidth)
@@ -55,27 +54,51 @@ fun TopResultView() {
             .swipeable(
                 orientation = Orientation.Vertical,
                 state = state,
-                anchors = mapOf(0f to false, blockSizePx to true),
+                anchors = anchors,
                 thresholds = { _, _ -> FractionalThreshold(0.2f) },
+                resistance = resistanceConfig(
+                    anchors.keys,
+                    10.dp.value,
+                    5f
+                ),
+                velocityThreshold = 60.dp
             ),
         shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
-        Column(
+        TextBox(process = 100 - (state.offset.value / blockSizePx * 100))
+    }
+}
+
+@Composable
+fun TextBox(process: Float) {
+    val isMax = process >= 100
+    val viewModel = viewModel<DateViewModel>()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        ItemText(viewModel.inputText.value, "")
+
+        Text("process $process", fontSize = 18.sp)
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
-            verticalArrangement = Arrangement.Bottom
         ) {
-            Text("TopResultView ${state.offset.value}", fontSize = 18.sp)
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                SlideIndicator(100 - (state.offset.value / blockSizePx * 100))
-            }
+            SlideIndicator(process)
         }
+    }
+}
+
+@Composable
+fun ItemText(input: String, result: String) {
+    Column(verticalArrangement = Arrangement.Bottom) {
+        Text(modifier = Modifier.fillMaxWidth(), text = input, textAlign = TextAlign.End)
     }
 }
