@@ -12,4 +12,13 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
     fun append(text: String) {
         inputText.value = inputText.value + text
     }
+
+    fun delete() {
+        if (inputText.value.isEmpty()) return
+        inputText.value = inputText.value.substring(0, inputText.value.length - 1)
+    }
+
+    fun clear() {
+        inputText.value = ""
+    }
 }
