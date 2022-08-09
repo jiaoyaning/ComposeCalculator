@@ -6,8 +6,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
 
 class DateViewModel(application: Application) : AndroidViewModel(application) {
+    var idpPortrait = true
     var textBoxHeight = 0.dp
     var inputText = mutableStateOf("")
+    var resultText = mutableStateOf("")
 
     fun append(text: String) {
         inputText.value = inputText.value + text
@@ -20,5 +22,9 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clear() {
         inputText.value = ""
+    }
+
+    fun calculate() {
+        resultText.value = "XXXXX"
     }
 }

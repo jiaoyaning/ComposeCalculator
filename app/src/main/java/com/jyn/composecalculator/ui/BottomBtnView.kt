@@ -1,5 +1,6 @@
 package com.jyn.composecalculator.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,13 +8,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.R
+import com.jyn.composecalculator.isPortrait
 
 /**
  * 底部按钮
@@ -26,22 +30,30 @@ private val numberColumns = listOf(
     listOf("÷", "×", "-", "+", "="),
 )
 
-const val BOTTOM_FRACTION = 0.67f
-
 @Preview(showBackground = true)
 @Composable
 fun BottomBtnView() {
-    Surface(
+    Row(
         Modifier
             .padding(bottom = 10.dp)
-            .background(MaterialTheme.colorScheme.secondary)
             .fillMaxHeight(BOTTOM_FRACTION)
-            .fillMaxWidth()
     ) {
+        if (!isPortrait) {
+            Row( //数列
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+            }
+        }
+
+        //竖屏基础按钮
         Row( //数列
             modifier = Modifier
                 .fillMaxHeight()
-                .fillMaxWidth()
+                .weight(1f)
                 .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -58,7 +70,7 @@ fun BottomBtnView() {
                             modifier = Modifier
                                 .padding(bottom = 10.dp)
                                 .weight(1f)
-                                .aspectRatio(1f)
+                                .then(if (isPortrait) Modifier.aspectRatio(1f) else Modifier)
                         ) {
                             ItemBtn(text = it)
                         }
@@ -88,12 +100,16 @@ fun ItemBtn(text: String) {
             contentAlignment = Alignment.Center
         ) {
             if (text == "D") {
-                Icon(painter = painterResource(R.drawable.ic_backspace), contentDescription = "")
+                Icon(
+                    modifier = Modifier.size(if (isPortrait) 30.dp else 15.dp),
+                    painter = painterResource(R.drawable.ic_backspace),
+                    contentDescription = ""
+                )
                 return@Box
             }
             Text(
                 text = text,
-                fontSize = 30.sp
+                fontSize = if (isPortrait) 30.sp else 15.sp
             )
         }
     }
@@ -108,5 +124,7 @@ fun textClick(viewModel: DateViewModel, text: String) {
         -> viewModel.delete()
         "C"
         -> viewModel.clear()
+        "="
+        -> viewModel.calculate()
     }
 }
