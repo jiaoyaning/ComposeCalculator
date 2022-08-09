@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
+import com.udojava.evalex.Expression
 
 class DateViewModel(application: Application) : AndroidViewModel(application) {
-    var idpPortrait = true
     var textBoxHeight = 0.dp
     var inputText = mutableStateOf("")
     var resultText = mutableStateOf("")
@@ -22,9 +22,22 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
 
     fun clear() {
         inputText.value = ""
+        resultText.value = ""
     }
 
     fun calculate() {
-        resultText.value = "XXXXX"
+        val expr = inputText.value.replace('×', '*').replace('÷', '/')
+        val expressions = arrayOf('+', '-', '*', '/')
+        if (expr.isEmpty()) return
+        if (!expressions.any { expr.contains(it) }) {
+            return
+        }
+        if (expressions.any { expr.endsWith(it) }) {
+            resultText.value = ""
+            return
+        }
+        val eval = Expression(expr).eval()
+
+        resultText.value = eval.toString()
     }
 }
