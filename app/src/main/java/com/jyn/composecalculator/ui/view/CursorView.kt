@@ -1,4 +1,4 @@
-package com.jyn.composecalculator.ui.draw
+package com.jyn.composecalculator.ui.view
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background

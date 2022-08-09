@@ -1,14 +1,13 @@
 package com.jyn.composecalculator.ui
 
-import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +17,7 @@ import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.R
 import com.jyn.composecalculator.isPortrait
+import com.jyn.composecalculator.ui.util.textClick
 
 /**
  * 底部按钮
@@ -112,19 +112,5 @@ fun ItemBtn(text: String) {
                 fontSize = if (isPortrait) 30.sp else 15.sp
             )
         }
-    }
-}
-
-fun textClick(viewModel: DateViewModel, text: String) {
-    when (text) {
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00",
-        "÷", "×", "-", "+"
-        -> viewModel.append(text)
-        "D"
-        -> viewModel.delete()
-        "C"
-        -> viewModel.clear()
-        "="
-        -> viewModel.calculate()
     }
 }
