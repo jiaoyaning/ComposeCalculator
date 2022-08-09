@@ -3,18 +3,17 @@ package com.jyn.composecalculator.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.R
 
 /**
  * 底部按钮
@@ -72,7 +71,6 @@ fun BottomBtnView() {
 
 @Composable
 fun ItemBtn(text: String) {
-    val modifier = if (text != "=") Modifier.aspectRatio(1f) else Modifier
     val viewModel = viewModel<DateViewModel>()
 
     Button(
@@ -89,6 +87,10 @@ fun ItemBtn(text: String) {
                 .fillMaxHeight(),
             contentAlignment = Alignment.Center
         ) {
+            if (text == "D") {
+                Icon(painter = painterResource(R.drawable.ic_backspace), contentDescription = "")
+                return@Box
+            }
             Text(
                 text = text,
                 fontSize = 30.sp

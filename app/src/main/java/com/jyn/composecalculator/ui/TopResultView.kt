@@ -157,9 +157,17 @@ fun InputText(input: String) {
 @Preview(showBackground = true)
 @Composable
 fun CursorView() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val float = infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = 1f, animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
     Spacer(
         modifier = Modifier
-            .background(Color.Red)
+            .background(if (float.value > 0.5) Color.Red else Color.Transparent)
             .width(2.dp)
             .height(50.dp)
     )
