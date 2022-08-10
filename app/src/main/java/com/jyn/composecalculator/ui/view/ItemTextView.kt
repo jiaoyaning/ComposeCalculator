@@ -81,7 +81,8 @@ fun ItemText(input: String, result: String) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = input,
-            fontSize = 20.sp,
+            fontSize = 23.sp,
+            maxLines = 1,
             textAlign = TextAlign.End,
             style = TextStyle(
                 platformStyle = PlatformTextStyle(
@@ -93,7 +94,8 @@ fun ItemText(input: String, result: String) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = result,
-            fontSize = 28.sp,
+            fontSize = 33.sp,
+            maxLines = 1,
             textAlign = TextAlign.End,
             style = TextStyle(
                 platformStyle = PlatformTextStyle(

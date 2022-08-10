@@ -1,20 +1,19 @@
 package com.jyn.composecalculator.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,14 +87,17 @@ fun TextBox(process: Float) {
     ) {
         LazyColumn(
             modifier = Modifier
-                .weight(1f)
-                .background(Color.Gray),
+                .weight(1f),
             reverseLayout = true,
-            userScrollEnabled = false
+            userScrollEnabled = false,
         ) {
-            items(viewModel.results) {
-                Spacer(modifier = Modifier.height(5.dp))
-                ItemText(input = it.input, result = it.result)
+            itemsIndexed(viewModel.results) { index, item ->
+                ItemText(input = item.input, result = item.result)
+                if (index < viewModel.results.size - 1) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Divider()
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
             }
         }
 
