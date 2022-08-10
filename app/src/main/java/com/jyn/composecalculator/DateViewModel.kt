@@ -11,7 +11,15 @@ data class Date(var input: String, var result: String)
 
 class DateViewModel(application: Application) : AndroidViewModel(application) {
     var textBoxHeight = 0.dp
-    var results = mutableListOf<Date>()
+    var results = mutableListOf<Date>().apply {
+        add(Date("111111+1","11111112"))
+        add(Date("211111+1","21111112"))
+        add(Date("311111+1","31111112"))
+        add(Date("411111+1","41111112"))
+        add(Date("511111+1","51111112"))
+        add(Date("611111+1","61111112"))
+        add(Date("711111+1","71111112"))
+    }
     var inputText = mutableStateOf("")
     var resultText = mutableStateOf("")
     var lastInputText = mutableStateOf("")
@@ -49,7 +57,7 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
         }
         try {
             val eval = Expression(expr).setPrecision(18).eval()
-            resultText.value = eval.toString()
+            resultText.value = eval.toPlainString()
             lastInputText.value = inputText.value
 
             if (results.size > 10) results.removeFirst()

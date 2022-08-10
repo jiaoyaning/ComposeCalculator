@@ -3,6 +3,7 @@ package com.jyn.composecalculator.ui.view
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -77,32 +78,40 @@ fun InputText(input: String) {
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun ItemText(input: String, result: String) {
-    Column(verticalArrangement = Arrangement.Bottom) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = input,
-            fontSize = 23.sp,
-            maxLines = 1,
-            textAlign = TextAlign.End,
-            style = TextStyle(
-                platformStyle = PlatformTextStyle(
-                    includeFontPadding = false
+    Column(
+        modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        SelectionContainer {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = input,
+                fontSize = 23.sp,
+                maxLines = 1,
+                color = Color.Gray,
+                textAlign = TextAlign.End,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
                 )
             )
-        )
+        }
 
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = result,
-            fontSize = 33.sp,
-            maxLines = 1,
-            textAlign = TextAlign.End,
-            style = TextStyle(
-                platformStyle = PlatformTextStyle(
-                    includeFontPadding = false
+        SelectionContainer {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = result,
+                fontSize = 33.sp,
+                maxLines = 1,
+                textAlign = TextAlign.End,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
                 )
             )
-        )
+        }
     }
 }
 
