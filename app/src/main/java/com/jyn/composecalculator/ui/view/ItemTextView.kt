@@ -12,8 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jyn.composecalculator.DateViewModel
@@ -68,9 +74,38 @@ fun InputText(input: String) {
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ItemText(input: String, result: String) {
     Column(verticalArrangement = Arrangement.Bottom) {
-        Text(modifier = Modifier.fillMaxWidth(), text = input, textAlign = TextAlign.End)
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = input,
+            fontSize = 20.sp,
+            textAlign = TextAlign.End,
+            style = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
+                )
+            )
+        )
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = result,
+            fontSize = 28.sp,
+            textAlign = TextAlign.End,
+            style = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
+                )
+            )
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ItemTextPre() {
+    ItemText("123456+1231231", "67474774747")
 }

@@ -1,7 +1,10 @@
 package com.jyn.composecalculator.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
@@ -11,6 +14,7 @@ import androidx.compose.material.swipeable
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +25,7 @@ import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.ui.view.InputText
+import com.jyn.composecalculator.ui.view.ItemText
 import com.jyn.composecalculator.ui.view.SlideIndicator
 
 /**
@@ -59,7 +64,7 @@ fun TopResultView() {
                 thresholds = { _, _ -> FractionalThreshold(0.2f) },
                 resistance = resistanceConfig(
                     anchors.keys,
-                    10.dp.value,
+                    5.dp.value,
                     0f
                 ),
                 velocityThreshold = 60.dp
@@ -81,6 +86,19 @@ fun TextBox(process: Float) {
             .padding(10.dp),
         verticalArrangement = Arrangement.Bottom
     ) {
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Gray),
+            reverseLayout = true,
+            userScrollEnabled = false
+        ) {
+            items(viewModel.results) {
+                Spacer(modifier = Modifier.height(5.dp))
+                ItemText(input = it.input, result = it.result)
+            }
+        }
+
         InputText(viewModel.inputText.value)
 
         Spacer(modifier = Modifier.height(5.dp))
