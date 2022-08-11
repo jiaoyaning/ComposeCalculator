@@ -31,7 +31,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
-        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += [
+                '-opt-in=kotlin.RequiresOptIn', '-Xjvm-default', 'compatibility'
+        ]
     }
     buildFeatures {
         compose true

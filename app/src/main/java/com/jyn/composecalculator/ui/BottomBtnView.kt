@@ -23,6 +23,12 @@ import com.jyn.composecalculator.ui.util.textClick
  * 底部按钮
  * Created by jiaoyaning on 2022/8/6.
  */
+val optionColumns = listOf(
+    listOf("INV", "sin", "ln", "π", "("),
+    listOf("RAD", "cos", "log", "e", ")"),
+    listOf("%", "tan", "√", "^", "!")
+)
+
 private val numberColumns = listOf(
     listOf("C", "7", "4", "1", "00"),
     listOf("%", "8", "5", "2", "0"),
@@ -35,7 +41,7 @@ private val numberColumns = listOf(
 fun BottomBtnView() {
     Row(
         Modifier
-            .padding(bottom = 10.dp)
+            .padding(bottom = if (!isPortrait) 0.dp else 10.dp)
             .fillMaxHeight(BOTTOM_FRACTION)
     ) {
         if (!isPortrait) {
@@ -46,6 +52,26 @@ fun BottomBtnView() {
                     .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                optionColumns.forEach { numberColumn ->
+                    Column( //横排
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxHeight()
+                            .weight(1f),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        numberColumn.forEach {
+                            Box(
+                                modifier = Modifier
+                                    .padding(bottom = 10.dp)
+                                    .weight(1f)
+                                    .then(if (isPortrait) Modifier.aspectRatio(1f) else Modifier)
+                            ) {
+                                ItemBtn(text = it)
+                            }
+                        }
+                    }
+                }
             }
         }
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -27,7 +28,7 @@ import com.jyn.composecalculator.DateViewModel
 
 
 @Composable
-fun InputText(input: String) {
+fun InputText(process: Float) {
     val viewModel = viewModel<DateViewModel>()
 
     val inputScrollState = rememberScrollState()
@@ -43,7 +44,9 @@ fun InputText(input: String) {
     }
 
     Column(
-        modifier = Modifier.height(viewModel.textBoxHeight),
+        modifier = Modifier
+            .height(viewModel.textBoxHeight * process)
+            .alpha(process),
         verticalArrangement = Arrangement.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -52,7 +55,7 @@ fun InputText(input: String) {
                     .weight(1f)
                     .horizontalScroll(inputScrollState)
                     .onSizeChanged { inputTextWidth.value = it.width },
-                text = input,
+                text = viewModel.inputText.value,
                 maxLines = 1,
                 fontSize = 50.sp,
                 textAlign = TextAlign.End,
@@ -79,39 +82,35 @@ fun InputText(input: String) {
 @Composable
 fun ItemText(input: String, result: String) {
     Column(
-        modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+        modifier = Modifier.padding(top = 30.dp, bottom = 30.dp),
         verticalArrangement = Arrangement.Bottom
     ) {
-        SelectionContainer {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = input,
-                fontSize = 23.sp,
-                maxLines = 1,
-                color = Color.Gray,
-                textAlign = TextAlign.End,
-                style = TextStyle(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = input,
+            fontSize = 23.sp,
+            maxLines = 1,
+            color = Color.Gray,
+            textAlign = TextAlign.End,
+            style = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
                 )
             )
-        }
+        )
 
-        SelectionContainer {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = result,
-                fontSize = 33.sp,
-                maxLines = 1,
-                textAlign = TextAlign.End,
-                style = TextStyle(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = result,
+            fontSize = 33.sp,
+            maxLines = 1,
+            textAlign = TextAlign.End,
+            style = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
                 )
             )
-        }
+        )
     }
 }
 

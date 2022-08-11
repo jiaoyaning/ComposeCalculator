@@ -20,7 +20,7 @@ import com.jyn.composecalculator.ui.theme.black1
  */
 @Composable
 fun SlideIndicator(process: Float) {
-    var offsetProcess = process
+    var offsetProcess = 1 - process
     if (offsetProcess < 0) offsetProcess *= 10
     LogUtils.tag("SlideIndicator").i("process: $offsetProcess")
     val width = 30.dp
@@ -35,7 +35,7 @@ fun SlideIndicator(process: Float) {
         val centerX = size.width / 2
         val centerY = size.height / 2
 
-        val yOffset = maxOffset.toPx() * offsetProcess / 100
+        val yOffset = maxOffset.toPx() * offsetProcess
 
         val half = width.toPx() / 2
         val leftStart = centerX - half

@@ -1,9 +1,9 @@
 package com.jyn.composecalculator.ui
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,11 +12,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.TabRowDefaults.Divider
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,11 +27,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
-import com.jyn.composecalculator.ui.theme.SecondaryRippleTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
 import com.jyn.composecalculator.ui.view.SlideIndicator
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 /**
  * 上层结果
@@ -57,10 +58,7 @@ fun TopResultView() {
     val blockSizePx = with(LocalDensity.current) { -topHeight.toPx() }
     val anchors = mapOf(0f to false, blockSizePx to true)
 
-//    val coroutineScope = rememberCoroutineScope()
-//    coroutineScope.launch {
-//        state.animateTo(true, SwipeableDefaults.AnimationSpec)
-//    }
+    val coroutineScope = rememberCoroutineScope()
 
     Surface(
         modifier = Modifier
@@ -83,8 +81,27 @@ fun TopResultView() {
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
-        TextBox(process = 100 - (state.offset.value / blockSizePx * 100))
+        TextBox(process = state.offset.value / blockSizePx)
     }
+
+    val callback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!state.currentValue) {
+                    coroutineScope.launch {
+                        state.animateTo(true, SwipeableDefaults.AnimationSpec)
+                    }
+                }
+            }
+        }
+    }
+    val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    DisposableEffect(key1 = Unit, effect = {
+        dispatcher?.addCallback(callback)
+        onDispose {
+            callback.remove()
+        }
+    })
 }
 
 /**
@@ -106,10 +123,13 @@ fun TextBox(process: Float) {
             userScrollEnabled = true,
         ) {
             itemsIndexed(viewModel.results) { index, item ->
-                Box(modifier = Modifier.clickable {
-                    viewModel.inputText.value = item.input
-                    viewModel.resultText.value = item.result
-                }) {
+                Box(
+                    modifier = Modifier.clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        viewModel.inputText.value = item.input
+                        viewModel.resultText.value = item.result
+                    }) {
                     ItemText(input = item.input, result = item.result)
                     if (index < viewModel.results.size - 1) {
                         Divider()
@@ -118,12 +138,13 @@ fun TextBox(process: Float) {
             }
         }
 
-        InputText(viewModel.inputText.value)
+        InputText(process)
 
         Spacer(modifier = Modifier.height(5.dp))
 
         Box(
             modifier = Modifier
+                .padding(top = 15.dp, bottom = 15.dp * abs(1 - process))
                 .fillMaxWidth()
         ) {
             SlideIndicator(process)
