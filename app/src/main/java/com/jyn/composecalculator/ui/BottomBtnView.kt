@@ -1,13 +1,16 @@
 package com.jyn.composecalculator.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,6 +20,7 @@ import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.R
 import com.jyn.composecalculator.isPortrait
+import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.util.textClick
 
 /**
@@ -41,6 +45,7 @@ private val numberColumns = listOf(
 fun BottomBtnView() {
     Row(
         Modifier
+            .background(myTheme.bottomBg)
             .padding(bottom = if (!isPortrait) 0.dp else 10.dp)
             .fillMaxHeight(BOTTOM_FRACTION)
     ) {
@@ -118,6 +123,9 @@ fun ItemBtn(text: String) {
         shape = RoundedCornerShape(1000.dp),
         contentPadding = PaddingValues(0.dp),
         onClick = { textClick(viewModel, text) },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = getBtnColor(text)
+        ),
     ) {
         Box(
             modifier = Modifier
@@ -127,16 +135,27 @@ fun ItemBtn(text: String) {
         ) {
             if (text == "D") {
                 Icon(
-                    modifier = Modifier.size(if (isPortrait) 30.dp else 15.dp),
+                    modifier = Modifier.size(if (isPortrait) 26.dp else 13.dp),
                     painter = painterResource(R.drawable.ic_backspace),
-                    contentDescription = ""
+                    contentDescription = "",
+                    tint = myTheme.textColor
                 )
                 return@Box
             }
             Text(
                 text = text,
+                color = myTheme.textColor,
                 fontSize = if (isPortrait) 30.sp else 15.sp
             )
         }
+    }
+}
+
+fun getBtnColor(text: String): Color {
+    return when (text) {
+        "%", "D", "÷", "×", "-", "+" -> myTheme.btnComputeBg
+        "C" -> myTheme.btnClearBg
+        "=" -> myTheme.btnEqualBg
+        else -> myTheme.btnNumBg
     }
 }

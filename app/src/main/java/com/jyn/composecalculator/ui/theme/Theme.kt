@@ -20,6 +20,41 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import com.jyn.composecalculator.isDark
+
+
+open class MyTheme(
+    val textColor: Color,       //字体颜色
+    val btnNumBg: Color,        //数字
+    val btnComputeBg: Color,    // + - * /
+    val btnEqualBg: Color,      // =号
+    val btnClearBg: Color,      // C号
+    val bottomBg:Color,         // 底部背景色
+    val topBg: Color,           // 顶部背景色
+)
+
+private val MyLightColor = MyTheme(
+    textColor = textColorLight,
+    btnNumBg = btnNumBgLight,
+    btnComputeBg = btnComputeBgLight,
+    btnEqualBg = btnEqualBgLight,
+    btnClearBg = btnClearBgLight,
+    bottomBg = bottomBgLight,
+    topBg = topBgLight,
+)
+
+private val MyDarkColor = MyTheme(
+    textColor = textColorDark,
+    btnNumBg = btnNumBgDark,
+    btnComputeBg = btnComputeBgDark,
+    btnEqualBg = btnEqualBgDark,
+    btnClearBg = btnClearBgDark,
+    bottomBg = bottomBgDark,
+    topBg = topBgDark,
+)
+
+val myTheme: MyTheme
+    get() = if (isDark) MyDarkColor else MyLightColor
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -40,6 +75,7 @@ fun ComposeCalculatorTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    isDark = darkTheme
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current

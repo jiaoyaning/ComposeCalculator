@@ -77,4 +77,6 @@ dependencies {
      * https://github.com/uklimaschewski/EvalEx
      */
     implementation "com.udojava:EvalEx:2.7"
+
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.25.0"
 }

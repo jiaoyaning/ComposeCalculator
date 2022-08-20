@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jyn.composecalculator.isDark
 
 /**
  * 光标
@@ -27,7 +28,12 @@ fun CursorView() {
 
     Spacer(
         modifier = Modifier
-            .background(if (float.value > 0.5) Color.Red else Color.Transparent)
+            .background(
+                if (float.value > 0.5)
+                    if (isDark) Color(0xFFAEC9F9) else Color(0xFF175BC4)
+                else
+                    Color.Transparent
+            )
             .width(2.dp)
             .height(50.dp)
     )

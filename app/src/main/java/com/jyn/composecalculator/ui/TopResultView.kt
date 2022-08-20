@@ -2,6 +2,7 @@ package com.jyn.composecalculator.ui
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
 import com.jyn.composecalculator.ui.view.SlideIndicator
