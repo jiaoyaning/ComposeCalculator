@@ -1,8 +1,9 @@
 package com.jyn.composecalculator.ui
 
+import android.animation.ArgbEvaluator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,11 +15,10 @@ import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,12 +28,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.ui.theme.argbEvaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
 import com.jyn.composecalculator.ui.view.SlideIndicator
 import kotlinx.coroutines.launch
 import kotlin.math.abs
+
 
 /**
  * 上层结果
@@ -62,10 +64,12 @@ fun TopResultView() {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val process = state.offset.value / blockSizePx
+
     Surface(
         modifier = Modifier
             .width(screenWidth)
-            .height(screenHeight)
+            .fillMaxHeight()
             .offset { IntOffset(0, state.offset.value.toInt()) }
             .swipeable(
                 orientation = Orientation.Vertical,
@@ -84,7 +88,7 @@ fun TopResultView() {
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
-        TextBox(process = state.offset.value / blockSizePx)
+        TextBox(process)
     }
 
     val callback = remember {
@@ -147,7 +151,7 @@ fun TextBox(process: Float) {
 
         Box(
             modifier = Modifier
-                .padding(top = 15.dp, bottom = 15.dp * abs(1 - process))
+                .padding(top = 15.dp, bottom = 25.dp * abs(1 - process))
                 .fillMaxWidth()
         ) {
             SlideIndicator(process)

@@ -5,20 +5,23 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
+import com.jyn.composecalculator.Date
 import com.udojava.evalex.Expression
+import java.text.SimpleDateFormat
+import java.util.*
 
-data class Date(var input: String, var result: String)
+data class Date(var time: String, var input: String, var result: String)
 
 class DateViewModel(application: Application) : AndroidViewModel(application) {
     var textBoxHeight = 0.dp
     var results = mutableListOf<Date>().apply {
-        add(Date("111111+1","11111112"))
-        add(Date("211111+1","21111112"))
-        add(Date("311111+1","31111112"))
-        add(Date("411111+1","41111112"))
-        add(Date("511111+1","51111112"))
-        add(Date("611111+1","61111112"))
-        add(Date("711111+1","71111112"))
+        add(Date(getNow(), "1+1", "2"))
+        add(Date(getNow(), "211111+1", "21111112"))
+        add(Date(getNow(), "311111+1", "31111112"))
+        add(Date(getNow(), "411111+1", "41111112"))
+        add(Date(getNow(), "511111+1", "51111112"))
+        add(Date(getNow(), "611111+1", "61111112"))
+        add(Date(getNow(), "711111+1", "71111112"))
     }
     var inputText = mutableStateOf("")
     var resultText = mutableStateOf("")
@@ -61,10 +64,23 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
             lastInputText.value = inputText.value
 
             if (results.size > 10) results.removeFirst()
-            results.add(0, Date(inputText.value, resultText.value))
+            results.add(0, Date(getNow(), inputText.value, resultText.value))
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(getApplication(), "计算错误！", Toast.LENGTH_SHORT).show()
         }
     }
+}
+
+fun getNow(): String {
+    return if (android.os.Build.VERSION.SDK_INT >= 24) {
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(Date())
+    } else {
+        val tms = Calendar.getInstance()
+        tms.get(Calendar.YEAR).toString() + "-" + tms.get(Calendar.MONTH)
+            .toString() + "-" + tms.get(Calendar.DAY_OF_MONTH)
+            .toString() + " " + tms.get(Calendar.HOUR_OF_DAY)
+            .toString() + ":" + tms.get(Calendar.MINUTE).toString() + ":" + tms.get(Calendar.SECOND)
+    }
+
 }
