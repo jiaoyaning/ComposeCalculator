@@ -79,6 +79,7 @@ fun TopResultView() {
                 ),
                 velocityThreshold = 60.dp
             ),
+        color = myTheme.topBg,
         shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
         tonalElevation = 3.dp,
         shadowElevation = 3.dp

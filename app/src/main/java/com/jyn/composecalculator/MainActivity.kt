@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -35,6 +36,8 @@ var isDark = false //暗黑模式
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         LogUtils.getLogConfig().configShowBorders(false)
         setContent {
             ComposeCalculatorTheme {
@@ -48,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 val systemUiController = rememberSystemUiController()
                 val useDarkIcons = isSystemInDarkTheme()
                 SideEffect {
-                    systemUiController.setSystemBarsColor(
+                    systemUiController.setStatusBarColor(
                         color = myTheme.topBg,
                         darkIcons = !useDarkIcons
                     )
