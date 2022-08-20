@@ -1,9 +1,7 @@
 package com.jyn.composecalculator.ui
 
-import android.animation.ArgbEvaluator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,10 +13,11 @@ import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
-import com.jyn.composecalculator.ui.theme.argbEvaluator
+import com.jyn.composecalculator.isPortrait
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
@@ -119,8 +118,7 @@ fun TextBox(process: Float) {
     val viewModel = viewModel<DateViewModel>()
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom
     ) {
         LazyColumn(
@@ -151,7 +149,10 @@ fun TextBox(process: Float) {
 
         Box(
             modifier = Modifier
-                .padding(top = 15.dp, bottom = 25.dp * abs(1 - process))
+                .padding(
+                    top = 10.dp,
+                    bottom = 10.dp
+                )
                 .fillMaxWidth()
         ) {
             SlideIndicator(process)

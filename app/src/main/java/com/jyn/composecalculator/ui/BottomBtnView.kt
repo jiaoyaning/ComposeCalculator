@@ -145,7 +145,7 @@ fun ItemBtn(text: String) {
             Text(
                 text = text,
                 color = myTheme.textColor,
-                fontSize = if (isPortrait) 30.sp else 15.sp
+                fontSize = if (isPortrait) 34.sp else 15.sp
             )
         }
     }

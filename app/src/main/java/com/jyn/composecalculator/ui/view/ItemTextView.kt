@@ -1,9 +1,12 @@
 package com.jyn.composecalculator.ui.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -25,6 +30,9 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.isPortrait
+import com.jyn.composecalculator.ui.theme.evaluator
+import com.jyn.composecalculator.ui.theme.myTheme
 
 
 @Composable
@@ -45,8 +53,10 @@ fun InputText(process: Float) {
 
     Column(
         modifier = Modifier
-            .height(viewModel.textBoxHeight * process)
-            .alpha(process),
+            .background(evaluator(process, myTheme.bottomBg, myTheme.topBg))
+            .height(viewModel.textBoxHeight * 1f)
+            .alpha(1f)
+            .padding(start = 10.dp, end = 10.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -56,11 +66,12 @@ fun InputText(process: Float) {
                     .horizontalScroll(inputScrollState)
                     .onSizeChanged { inputTextWidth.value = it.width },
                 text = viewModel.inputText.value,
+                color = myTheme.textColor,
                 maxLines = 1,
-                fontSize = 50.sp,
+                fontSize = if (isPortrait) 50.sp else 25.sp,
                 textAlign = TextAlign.End,
             )
-            CursorView()
+            CursorView(if (isPortrait) 50.dp else 25.dp)
         }
 
         Text(
@@ -71,7 +82,7 @@ fun InputText(process: Float) {
                 .horizontalScroll(resultScrollState)
                 .onSizeChanged { resultTextWidth.value = it.width },
             maxLines = 1,
-            fontSize = 30.sp,
+            fontSize = if (isPortrait) 30.sp else 15.sp,
             color = Color.Gray,
             textAlign = TextAlign.End,
         )
@@ -82,16 +93,16 @@ fun InputText(process: Float) {
 @Composable
 fun ItemText(input: String, result: String) {
     Column(
-        modifier = Modifier.padding(top = 30.dp, bottom = 30.dp),
-        verticalArrangement = Arrangement.Bottom
+        modifier = Modifier.height(110.dp),
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = input,
-            fontSize = 23.sp,
+            fontSize = if (isPortrait) 33.sp else 16.sp,
             maxLines = 1,
-            color = Color.Gray,
             textAlign = TextAlign.End,
+            color = myTheme.textColor,
             style = TextStyle(
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = false
@@ -102,7 +113,8 @@ fun ItemText(input: String, result: String) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = result,
-            fontSize = 33.sp,
+            color = Color.Gray,
+            fontSize = if (isPortrait) 23.sp else 12.sp,
             maxLines = 1,
             textAlign = TextAlign.End,
             style = TextStyle(

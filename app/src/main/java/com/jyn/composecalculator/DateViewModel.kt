@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
-import com.jyn.composecalculator.Date
 import com.udojava.evalex.Expression
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +26,12 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
     var resultText = mutableStateOf("")
     var lastInputText = mutableStateOf("")
 
-    fun append(text: String) {
+    fun appendNum(text: String) {
+        inputText.value = inputText.value + text
+    }
+
+    fun appendCompute(text: String) {
+        if (!standards(text)) return
         inputText.value = inputText.value + text
     }
 
@@ -65,10 +69,16 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
 
             if (results.size > 10) results.removeFirst()
             results.add(0, Date(getNow(), inputText.value, resultText.value))
+
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(getApplication(), "计算错误！", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun standards(text: String): Boolean {
+        val doesExist = inputText.value.last().toString() in arrayOf("÷", "×", "-", "+", ".")
+        return !doesExist
     }
 }
 

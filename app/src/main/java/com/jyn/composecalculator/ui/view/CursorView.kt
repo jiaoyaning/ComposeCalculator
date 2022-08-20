@@ -9,15 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jyn.composecalculator.isDark
 
 /**
  * 光标
  */
-@Preview(showBackground = true)
 @Composable
-fun CursorView() {
+fun CursorView(height: Dp) {
     val infiniteTransition = rememberInfiniteTransition()
     val float = infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 1f, animationSpec = infiniteRepeatable(
@@ -34,7 +34,7 @@ fun CursorView() {
                 else
                     Color.Transparent
             )
-            .width(2.dp)
-            .height(50.dp)
+            .width(3.dp)
+            .height(height)
     )
 }
