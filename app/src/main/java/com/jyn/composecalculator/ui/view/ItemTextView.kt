@@ -4,8 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.isPortrait
-import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 
 @Composable
@@ -100,7 +97,7 @@ fun InputText(process: Float) {
 @Composable
 fun ItemText(input: String, result: String) {
     Column(
-        modifier = Modifier.height(110.dp),
+        modifier = Modifier.height(120.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -117,11 +114,13 @@ fun ItemText(input: String, result: String) {
             )
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = result,
             color = Color.Gray,
-            fontSize = if (isPortrait) 23.sp else 20.sp,
+            fontSize = if (isPortrait) 26.sp else 23.sp,
             maxLines = 1,
             textAlign = TextAlign.End,
             style = TextStyle(

@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
-import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
@@ -131,7 +130,7 @@ fun TextBox(process: Float, onClick: () -> Unit) {
     ) {
         TopAppBar(
             modifier = Modifier
-                .padding(top = 30.dp)
+                .padding(top = 25.dp)
                 .height(50.dp),
             title = { Text("历史记录", color = myTheme.textColor) },
             navigationIcon = {
@@ -162,9 +161,6 @@ fun TextBox(process: Float, onClick: () -> Unit) {
                         viewModel.resultText.value = item.result
                     }) {
                     ItemText(input = item.input, result = item.result)
-                    if (index < viewModel.results.size - 1) {
-                        Divider()
-                    }
                 }
             }
         }

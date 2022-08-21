@@ -9,13 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.isDark
-import com.jyn.composecalculator.ui.theme.myTheme
 
 /**
  * 取值1..100
