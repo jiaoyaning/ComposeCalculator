@@ -49,7 +49,8 @@ fun InputText(process: Float) {
         Column(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .background(evaluator(1- process, myTheme.bottomBg, myTheme.topBg))
+                .background(myTheme.topBg)
+//                .background(evaluator(1- process, myTheme.bottomBg, myTheme.topBg))
                 .height(viewModel.textBoxHeight * 1f)
                 .alpha(1f)
                 .padding(start = 10.dp, end = 10.dp),
@@ -64,7 +65,7 @@ fun InputText(process: Float) {
                     text = viewModel.inputText.value,
                     color = myTheme.textColor,
                     maxLines = 1,
-                    fontSize = if (isPortrait) 50.sp else 25.sp,
+                    fontSize = if (isPortrait) 50.sp else 28.sp,
                     textAlign = TextAlign.End,
                 )
                 CursorView(if (isPortrait) 50.dp else 25.dp)
@@ -78,7 +79,7 @@ fun InputText(process: Float) {
                     .horizontalScroll(resultScrollState)
                     .onSizeChanged { resultTextWidth.value = it.width },
                 maxLines = 1,
-                fontSize = if (isPortrait) 30.sp else 15.sp,
+                fontSize = if (isPortrait) 30.sp else 20.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.End,
             )
@@ -86,11 +87,11 @@ fun InputText(process: Float) {
 
         Text(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(start = 20.dp, top = 10.dp)
                 .alpha(process),
             text = "当前表达式",
-            color = Color.Gray,
-            fontSize = if (isPortrait) 20.sp else 10.sp,
+            color = myTheme.textColor,
+            fontSize = if (isPortrait) 20.sp else 15.sp,
         )
     }
 }
@@ -105,7 +106,7 @@ fun ItemText(input: String, result: String) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = input,
-            fontSize = if (isPortrait) 33.sp else 16.sp,
+            fontSize = if (isPortrait) 33.sp else 25.sp,
             maxLines = 1,
             textAlign = TextAlign.End,
             color = myTheme.textColor,
@@ -120,7 +121,7 @@ fun ItemText(input: String, result: String) {
             modifier = Modifier.fillMaxWidth(),
             text = result,
             color = Color.Gray,
-            fontSize = if (isPortrait) 23.sp else 12.sp,
+            fontSize = if (isPortrait) 23.sp else 20.sp,
             maxLines = 1,
             textAlign = TextAlign.End,
             style = TextStyle(

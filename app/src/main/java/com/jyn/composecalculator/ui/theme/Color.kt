@@ -31,7 +31,7 @@ val bottomBgLight = Color(0xFFFFFFFF)
 val topBgLight = Color(0xFFEAEFFA)
 val topListBgLight = Color(0xFFF1F6FD)
 
-val textColorDark = Color(0xFFC0E7FB)
+val textColorDark = Color(0xFFeeeeee)
 val btnNumBgDark = Color(0xFF29292B)
 val btnComputeBgDark = Color(0xFF004A78)
 val btnEqualBgDark = Color(0xFF0742A0)

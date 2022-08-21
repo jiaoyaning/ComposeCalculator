@@ -13,10 +13,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.TabRowDefaults.Divider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,15 +30,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
-import com.jyn.composecalculator.isPortrait
 import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
 import com.jyn.composecalculator.ui.view.SlideIndicator
 import kotlinx.coroutines.launch
-import kotlin.math.abs
-
 
 /**
  * 上层结果
@@ -90,7 +91,11 @@ fun TopResultView() {
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
-        TextBox(process)
+        TextBox(process, onClick = {
+            coroutineScope.launch {
+                state.animateTo(true, SwipeableDefaults.AnimationSpec)
+            }
+        })
     }
 
     val callback = remember {
@@ -117,13 +122,29 @@ fun TopResultView() {
  * 计算布局 & 历史列表
  */
 @Composable
-fun TextBox(process: Float) {
+fun TextBox(process: Float, onClick: () -> Unit) {
     val viewModel = viewModel<DateViewModel>()
     Column(
         modifier = Modifier
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom
     ) {
+        TopAppBar(
+            modifier = Modifier
+                .padding(top = 30.dp)
+                .height(50.dp),
+            title = { Text("历史记录", color = myTheme.textColor) },
+            navigationIcon = {
+                IconButton(onClick) {
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        null,
+                        tint = myTheme.textColor
+                    )
+                }
+            },
+            backgroundColor = myTheme.topBg
+        )
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
@@ -152,15 +173,15 @@ fun TextBox(process: Float) {
             modifier = Modifier.background(myTheme.topListBg),
             color = myTheme.topListBg,
             shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
-            tonalElevation = 3.dp * (process),
-            shadowElevation = 3.dp * (process),
+            tonalElevation = 4.dp * (process),
+            shadowElevation = 4.dp * (process),
         ) {
             InputText(process)
         }
 
         Box(
             modifier = Modifier
-                .background(evaluator(1 - process, myTheme.bottomBg, myTheme.topBg))
+                .background(myTheme.topBg)
                 .padding(top = 10.dp, bottom = 10.dp)
                 .fillMaxWidth()
         ) {

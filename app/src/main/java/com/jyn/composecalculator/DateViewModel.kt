@@ -31,7 +31,7 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun appendCompute(text: String) {
-        if (!standards(text)) return
+        if (!standards()) return
         inputText.value = inputText.value + text
     }
 
@@ -76,7 +76,7 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun standards(text: String): Boolean {
+    private fun standards(): Boolean {
         val doesExist = inputText.value.last().toString() in arrayOf("÷", "×", "-", "+", ".")
         return !doesExist
     }

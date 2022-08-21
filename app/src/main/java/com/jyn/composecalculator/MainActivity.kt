@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
@@ -32,6 +34,7 @@ import com.jyn.composecalculator.ui.theme.myTheme
 const val BOTTOM_FRACTION = 0.67f
 var isPortrait = false //横竖屏
 var isDark = false //暗黑模式
+var statusBarHeight = 0
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +59,17 @@ class MainActivity : ComponentActivity() {
                         darkIcons = !useDarkIcons
                     )
                 }
+
+                with(LocalContext.current) {
+                    val size: Int = resources.getDimensionPixelSize(
+                        resources.getIdentifier(
+                            "status_bar_height",
+                            "dimen",
+                            "android"
+                        )
+                    )
+                }
+                LogUtils.tag("main").i("statusBarHeight:$statusBarHeight")
             }
         }
     }
