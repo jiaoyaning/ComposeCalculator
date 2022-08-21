@@ -2,6 +2,7 @@ package com.jyn.composecalculator.ui
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,11 +14,9 @@ import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +27,7 @@ import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
 import com.jyn.composecalculator.isPortrait
+import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
@@ -63,7 +63,7 @@ fun TopResultView() {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val process = state.offset.value / blockSizePx
+    val process = 1 - state.offset.value / blockSizePx
 
     Surface(
         modifier = Modifier
@@ -83,7 +83,10 @@ fun TopResultView() {
                 velocityThreshold = 60.dp
             ),
         color = myTheme.topBg,
-        shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
+        shape = RoundedCornerShape(
+            bottomStart = 25.dp * (1 - process),
+            bottomEnd = 25.dp * (1 - process)
+        ),
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
@@ -123,7 +126,9 @@ fun TextBox(process: Float) {
     ) {
         LazyColumn(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .background(myTheme.topListBg)
+                .padding(start = 10.dp, end = 10.dp),
             reverseLayout = true,
             userScrollEnabled = true,
         ) {
@@ -143,16 +148,20 @@ fun TextBox(process: Float) {
             }
         }
 
-        InputText(process)
-
-        Spacer(modifier = Modifier.height(5.dp))
+        Surface(
+            modifier = Modifier.background(myTheme.topListBg),
+            color = myTheme.topListBg,
+            shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
+            tonalElevation = 3.dp * (process),
+            shadowElevation = 3.dp * (process),
+        ) {
+            InputText(process)
+        }
 
         Box(
             modifier = Modifier
-                .padding(
-                    top = 10.dp,
-                    bottom = 10.dp
-                )
+                .background(evaluator(1 - process, myTheme.bottomBg, myTheme.topBg))
+                .padding(top = 10.dp, bottom = 10.dp)
                 .fillMaxWidth()
         ) {
             SlideIndicator(process)

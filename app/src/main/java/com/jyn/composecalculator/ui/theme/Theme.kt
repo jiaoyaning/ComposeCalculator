@@ -31,6 +31,7 @@ open class MyTheme(
     val btnClearBg: Color,      // C号
     val bottomBg:Color,         // 底部背景色
     val topBg: Color,           // 顶部背景色
+    val topListBg: Color,       // 顶部列表背景色
 )
 
 private val MyLightColor = MyTheme(
@@ -41,6 +42,7 @@ private val MyLightColor = MyTheme(
     btnClearBg = btnClearBgLight,
     bottomBg = bottomBgLight,
     topBg = topBgLight,
+    topListBg = topListBgLight,
 )
 
 private val MyDarkColor = MyTheme(
@@ -51,6 +53,7 @@ private val MyDarkColor = MyTheme(
     btnClearBg = btnClearBgDark,
     bottomBg = bottomBgDark,
     topBg = topBgDark,
+    topListBg = topListBgDark,
 )
 
 val myTheme: MyTheme

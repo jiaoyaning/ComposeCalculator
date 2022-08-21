@@ -22,7 +22,7 @@ import com.jyn.composecalculator.ui.theme.myTheme
  */
 @Composable
 fun SlideIndicator(process: Float) {
-    var offsetProcess = 1 - process
+    var offsetProcess = process
     if (offsetProcess < 0) offsetProcess *= 10
     LogUtils.tag("SlideIndicator").i("process: $offsetProcess")
     val width = 30.dp
