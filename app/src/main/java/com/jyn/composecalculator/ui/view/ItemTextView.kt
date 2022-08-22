@@ -42,53 +42,38 @@ fun InputText(process: Float) {
         resultScrollState.scrollTo(resultTextWidth.value) //自动滚动到最后一个
     }
 
-    Box {
-        Column(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .background(myTheme.topBg)
-//                .background(evaluator(1- process, myTheme.bottomBg, myTheme.topBg))
-                .height(viewModel.textBoxHeight * 1f)
-                .alpha(1f)
-                .padding(start = 10.dp, end = 10.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    modifier = Modifier
-                        .weight(1f)
-                        .horizontalScroll(inputScrollState)
-                        .onSizeChanged { inputTextWidth.value = it.width },
-                    text = viewModel.inputText.value,
-                    color = myTheme.textColor,
-                    maxLines = 1,
-                    fontSize = if (isPortrait) 50.sp else 28.sp,
-                    textAlign = TextAlign.End,
-                )
-                CursorView(if (isPortrait) 50.dp else 25.dp)
-            }
-
+    Column(
+        modifier = Modifier
+            .height(viewModel.textBoxHeight * 1f)
+            .padding(start = 10.dp, end = 10.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = viewModel.resultText.value,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 5.dp)
-                    .horizontalScroll(resultScrollState)
-                    .onSizeChanged { resultTextWidth.value = it.width },
+                    .weight(1f)
+                    .horizontalScroll(inputScrollState)
+                    .onSizeChanged { inputTextWidth.value = it.width },
+                text = viewModel.inputText.value,
+                color = myTheme.textColor,
                 maxLines = 1,
-                fontSize = if (isPortrait) 30.sp else 20.sp,
-                color = Color.Gray,
+                fontSize = if (isPortrait) 50.sp else 28.sp,
                 textAlign = TextAlign.End,
             )
+            CursorView(if (isPortrait) 50.dp else 25.dp)
         }
 
         Text(
+            text = viewModel.resultText.value,
             modifier = Modifier
-                .padding(start = 20.dp, top = 10.dp)
-                .alpha(process),
-            text = "当前表达式",
-            color = myTheme.textColor,
-            fontSize = if (isPortrait) 20.sp else 15.sp,
+                .fillMaxWidth()
+                .padding(end = 5.dp)
+                .horizontalScroll(resultScrollState)
+                .onSizeChanged { resultTextWidth.value = it.width },
+            maxLines = 1,
+            fontSize = if (isPortrait) 30.sp else 20.sp,
+            color = Color.Gray,
+            textAlign = TextAlign.End,
         )
     }
 }

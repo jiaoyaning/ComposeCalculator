@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
-import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Surface
@@ -30,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
 import com.jyn.composecalculator.ui.view.ItemText
@@ -63,7 +63,7 @@ fun TopResultView() {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val process = 1 - state.offset.value / blockSizePx
+    var process = 1f
 
     Surface(
         modifier = Modifier
@@ -84,13 +84,14 @@ fun TopResultView() {
             ),
         color = myTheme.topBg,
         shape = RoundedCornerShape(
-            bottomStart = 25.dp * (1 - process),
-            bottomEnd = 25.dp * (1 - process)
+            bottomStart = 25.dp * process,
+            bottomEnd = 25.dp * process
         ),
         tonalElevation = 3.dp,
         shadowElevation = 3.dp
     ) {
-        TextBox(process, onClick = {
+        process = state.offset.value / blockSizePx
+        TextBox(1 - process, onClick = {
             coroutineScope.launch {
                 state.animateTo(true, SwipeableDefaults.AnimationSpec)
             }
@@ -128,22 +129,37 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom
     ) {
-        TopAppBar(
+
+        Surface(
             modifier = Modifier
-                .padding(top = 25.dp)
-                .height(50.dp),
-            title = { Text("历史记录", color = myTheme.textColor) },
-            navigationIcon = {
-                IconButton(onClick) {
-                    Icon(
-                        Icons.Filled.ArrowBack,
-                        null,
-                        tint = myTheme.textColor
-                    )
-                }
-            },
-            backgroundColor = myTheme.topBg
-        )
+                .background(myTheme.topListBg)
+                .padding(top = 25.dp, bottom = 10.dp),
+            color = myTheme.topBg,
+            shape = RoundedCornerShape(bottomStart = 25.dp, bottomEnd = 25.dp),
+            tonalElevation = 4.dp * (process),
+            shadowElevation = 4.dp * (process),
+        ) {
+            Box {
+                InputText(process)
+
+                TopAppBar(
+                    modifier = Modifier.height(40.dp),
+                    title = { Text("当前表达式", color = myTheme.textColor) },
+                    navigationIcon = {
+                        IconButton(onClick) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                null,
+                                tint = myTheme.textColor
+                            )
+                        }
+                    },
+                    backgroundColor = myTheme.topBg,
+                    elevation = 0.dp
+                )
+            }
+        }
+
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
@@ -165,20 +181,22 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             }
         }
 
-        Surface(
-            modifier = Modifier.background(myTheme.topListBg),
-            color = myTheme.topListBg,
-            shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
-            tonalElevation = 4.dp * (process),
-            shadowElevation = 4.dp * (process),
+        Box(
+            modifier = Modifier
+                .height(viewModel.textBoxHeight * (1 - process))
+                .background(evaluator(1 - process, myTheme.topListBg, myTheme.topBg)),
         ) {
             InputText(process)
         }
 
         Box(
             modifier = Modifier
-                .background(myTheme.topBg)
-                .padding(top = 10.dp, bottom = 10.dp)
+                .clickable(
+                    onClick = onClick,
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() })
+                .background(evaluator(1 - process, myTheme.topListBg, myTheme.topBg))
+                .padding(top = 10.dp, bottom = 10.dp + 15.dp * process)
                 .fillMaxWidth()
         ) {
             SlideIndicator(process)

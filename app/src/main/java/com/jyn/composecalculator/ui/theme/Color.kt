@@ -2,7 +2,6 @@ package com.jyn.composecalculator.ui.theme
 
 import android.animation.ArgbEvaluator
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
 import androidx.compose.ui.graphics.toArgb
 
 val argbEvaluator by lazy { ArgbEvaluator() }

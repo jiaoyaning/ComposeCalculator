@@ -92,5 +92,4 @@ fun getNow(): String {
             .toString() + " " + tms.get(Calendar.HOUR_OF_DAY)
             .toString() + ":" + tms.get(Calendar.MINUTE).toString() + ":" + tms.get(Calendar.SECOND)
     }
-
 }
