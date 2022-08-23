@@ -2,13 +2,14 @@ package com.jyn.composecalculator.ui
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
@@ -29,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
 import com.jyn.composecalculator.BOTTOM_FRACTION
 import com.jyn.composecalculator.DateViewModel
+import com.jyn.composecalculator.isPortrait
 import com.jyn.composecalculator.ui.theme.evaluator
 import com.jyn.composecalculator.ui.theme.myTheme
 import com.jyn.composecalculator.ui.view.InputText
@@ -91,11 +93,15 @@ fun TopResultView() {
         shadowElevation = 3.dp
     ) {
         process = state.offset.value / blockSizePx
-        TextBox(1 - process, onClick = {
-            coroutineScope.launch {
-                state.animateTo(true, SwipeableDefaults.AnimationSpec)
+        Row() {
+            Box(modifier = Modifier.weight(1f)) {
+                TextBox(1 - process) {
+                    coroutineScope.launch {
+                        state.animateTo(!state.targetValue, SwipeableDefaults.AnimationSpec)
+                    }
+                }
             }
-        })
+        }
     }
 
     val callback = remember {
@@ -121,6 +127,7 @@ fun TopResultView() {
 /**
  * 计算布局 & 历史列表
  */
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun TextBox(process: Float, onClick: () -> Unit) {
     val viewModel = viewModel<DateViewModel>()
@@ -142,21 +149,24 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             Box {
                 InputText(process)
 
-                TopAppBar(
-                    modifier = Modifier.height(40.dp),
-                    title = { Text("当前表达式", color = myTheme.textColor) },
-                    navigationIcon = {
-                        IconButton(onClick) {
-                            Icon(
-                                Icons.Filled.ArrowBack,
-                                null,
-                                tint = myTheme.textColor
-                            )
-                        }
-                    },
-                    backgroundColor = myTheme.topBg,
-                    elevation = 0.dp
-                )
+                //TitleBar
+                if (isPortrait) {
+                    TopAppBar(
+                        modifier = Modifier.height(40.dp),
+                        title = { Text("当前表达式", color = myTheme.textColor) },
+                        navigationIcon = {
+                            IconButton(onClick) {
+                                Icon(
+                                    Icons.Filled.ArrowBack,
+                                    null,
+                                    tint = myTheme.textColor
+                                )
+                            }
+                        },
+                        backgroundColor = myTheme.topBg,
+                        elevation = 0.dp
+                    )
+                }
             }
         }
 
@@ -168,7 +178,7 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             reverseLayout = true,
             userScrollEnabled = true,
         ) {
-            itemsIndexed(viewModel.results) { index, item ->
+            items(viewModel.results) { item ->
                 Box(
                     modifier = Modifier.clickable(
                         indication = null,

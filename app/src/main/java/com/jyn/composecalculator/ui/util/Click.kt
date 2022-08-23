@@ -6,7 +6,7 @@ fun textClick(viewModel: DateViewModel, text: String) {
     when (text) {
         "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00",
         -> viewModel.appendNum(text)
-        "÷", "×", "-", "+",".",
+        "÷", "×", "-", "+", ".",
         -> viewModel.appendCompute(text)
         "D"
         -> viewModel.delete()
@@ -14,5 +14,7 @@ fun textClick(viewModel: DateViewModel, text: String) {
         -> viewModel.clear()
         "="
         -> viewModel.calculate()
+        else
+        -> viewModel.appendNum(text)
     }
 }

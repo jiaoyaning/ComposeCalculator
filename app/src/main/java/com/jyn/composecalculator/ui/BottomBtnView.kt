@@ -28,9 +28,9 @@ import com.jyn.composecalculator.ui.util.textClick
  * Created by jiaoyaning on 2022/8/6.
  */
 val optionColumns = listOf(
-    listOf("INV", "sin", "ln", "π", "("),
+    listOf("DEG", "sin", "ln", "π", "("),
     listOf("RAD", "cos", "log", "e", ")"),
-    listOf("%", "tan", "√", "^", "!")
+    listOf("FACT", "tan", "√", "^", "!")
 )
 
 private val numberColumns = listOf(

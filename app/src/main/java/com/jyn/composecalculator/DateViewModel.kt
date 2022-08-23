@@ -2,6 +2,7 @@ package com.jyn.composecalculator
 
 import android.app.Application
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -13,7 +14,7 @@ data class Date(var time: String, var input: String, var result: String)
 
 class DateViewModel(application: Application) : AndroidViewModel(application) {
     var textBoxHeight = 0.dp
-    var results = mutableListOf<Date>().apply {
+    var results = mutableStateListOf<Date>().apply {
         add(Date(getNow(), "24+32", "56"))
         add(Date(getNow(), "32+24", "56"))
         add(Date(getNow(), "32+24-6", "50"))
@@ -27,7 +28,11 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
     var lastInputText = mutableStateOf("")
 
     fun appendNum(text: String) {
-        inputText.value = inputText.value + text
+        val replace = text.replace("sin", "sin(")
+            .replace("cos", "cos(")
+            .replace("tan", "tan(")
+            .replace("log", "log(")
+        inputText.value = inputText.value + replace
     }
 
     fun appendCompute(text: String) {
@@ -52,8 +57,12 @@ class DateViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        val expr = inputText.value.replace('×', '*').replace('÷', '/').replace("%", "/100")
-        val expressions = arrayOf('+', '-', '*', '/')
+        val expr = inputText.value
+            .replace('×', '*')
+            .replace('÷', '/')
+            .replace("%", "/100")
+        val expressions =
+            arrayOf("+", "-", "*", "/", "sin", "cos", "tan", "log", "^", "√", "!", "π")
         if (expr.isEmpty()) return
         if (!expressions.any { expr.contains(it) }) {
             return
