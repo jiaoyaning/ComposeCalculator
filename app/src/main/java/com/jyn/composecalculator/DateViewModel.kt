@@ -14,13 +14,13 @@ data class Date(var time: String, var input: String, var result: String)
 class DateViewModel(application: Application) : AndroidViewModel(application) {
     var textBoxHeight = 0.dp
     var results = mutableListOf<Date>().apply {
-        add(Date(getNow(), "1+1", "2"))
-        add(Date(getNow(), "211111+1", "21111112"))
-        add(Date(getNow(), "311111+1", "31111112"))
-        add(Date(getNow(), "411111+1", "41111112"))
-        add(Date(getNow(), "511111+1", "51111112"))
-        add(Date(getNow(), "611111+1", "61111112"))
-        add(Date(getNow(), "711111+1", "71111112"))
+        add(Date(getNow(), "24+32", "56"))
+        add(Date(getNow(), "32+24", "56"))
+        add(Date(getNow(), "32+24-6", "50"))
+        add(Date(getNow(), "63+58", "121"))
+        add(Date(getNow(), "396÷3", "132"))
+        add(Date(getNow(), "123×3", "369"))
+        add(Date(getNow(), "640×30", "19200"))
     }
     var inputText = mutableStateOf("")
     var resultText = mutableStateOf("")
