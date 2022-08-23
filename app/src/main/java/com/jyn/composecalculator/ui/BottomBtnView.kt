@@ -33,7 +33,7 @@ val optionColumns = listOf(
     listOf("FACT", "tan", "√", "^", "!")
 )
 
-private val numberColumns = listOf(
+val numberColumns = listOf(
     listOf("C", "7", "4", "1", "00"),
     listOf("%", "8", "5", "2", "0"),
     listOf("D", "9", "6", "3", "."),

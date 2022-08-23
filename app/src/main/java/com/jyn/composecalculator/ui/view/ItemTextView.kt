@@ -1,6 +1,8 @@
 package com.jyn.composecalculator.ui.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -60,7 +62,9 @@ fun InputText(process: Float) {
                 fontSize = if (isPortrait) 50.sp else 28.sp,
                 textAlign = TextAlign.End,
             )
-            CursorView(if (isPortrait) 50.dp else 25.dp)
+            AnimatedVisibility(visible = (process == 0f)) {
+                CursorView(if (isPortrait) 50.dp else 25.dp)
+            }
         }
 
         Text(
@@ -81,12 +85,28 @@ fun InputText(process: Float) {
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun ItemText(input: String, result: String) {
+    val viewModel = viewModel<DateViewModel>()
+    val inputScrollState = rememberScrollState()
+    val resultScrollState = rememberScrollState()
+    val inputTextWidth = remember { mutableStateOf(0) }
+    val resultTextWidth = remember { mutableStateOf(0) }
+
+    LaunchedEffect(inputTextWidth.value) {
+        inputScrollState.scrollTo(inputTextWidth.value) //自动滚动到最后一个
+    }
+    LaunchedEffect(inputTextWidth.value) {
+        resultScrollState.scrollTo(resultTextWidth.value) //自动滚动到最后一个
+    }
+
     Column(
         modifier = Modifier.height(120.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged { inputTextWidth.value = it.width }
+                .clickable { viewModel.appendNum(input) },
             text = input,
             fontSize = if (isPortrait) 33.sp else 25.sp,
             maxLines = 1,
@@ -102,7 +122,10 @@ fun ItemText(input: String, result: String) {
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { viewModel.appendNum(result) }
+                .onSizeChanged { resultTextWidth.value = it.width },
             text = result,
             color = Color.Gray,
             fontSize = if (isPortrait) 26.sp else 23.sp,

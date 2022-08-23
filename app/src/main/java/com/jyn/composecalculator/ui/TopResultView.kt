@@ -21,6 +21,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -95,15 +97,12 @@ fun TopResultView() {
         shadowElevation = 3.dp
     ) {
         process = state.offset.value / blockSizePx
-        Row() {
-            Box(modifier = Modifier.weight(1f)) {
-                TextBox(1 - process) {
-                    coroutineScope.launch {
-                        state.animateTo(!state.targetValue, SwipeableDefaults.AnimationSpec)
-                    }
+        TextBox(1 - process,
+            onClick = {
+                coroutineScope.launch {
+                    state.animateTo(!state.targetValue, SwipeableDefaults.AnimationSpec)
                 }
-            }
-        }
+            })
     }
 
     val callback = remember {
@@ -133,42 +132,12 @@ fun TopResultView() {
 @Composable
 fun TextBox(process: Float, onClick: () -> Unit) {
     val viewModel = viewModel<DateViewModel>()
-    val openDialog = remember { mutableStateOf(-1) }
+    val openDialog: MutableState<Int> = remember { mutableStateOf(-1) }
     if (openDialog.value != -1) {
-        AlertDialog(
-            backgroundColor = myTheme.topBg,
-            onDismissRequest = { openDialog.value = -1 },
-            title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Filled.Delete,
-                        contentDescription = null,
-                        modifier = Modifier.size(25.dp),
-                        tint = Color.Red
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(
-                        text = "是否决定删除该记录",
-                        color = myTheme.textColor,
-                        style = MaterialTheme.typography.h6
-                    )
-                }
-            }, confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.results.removeAt(openDialog.value)
-                        openDialog.value = -1
-                    },
-                ) { Text("确认", fontWeight = FontWeight.W700, color = myTheme.textColor) }
-            }, dismissButton = {
-                TextButton(onClick = { openDialog.value = -1 }) {
-                    Text("取消", fontWeight = FontWeight.W700, color = myTheme.textColor)
-                }
-            })
+        DeleteDialog(openDialog)
     }
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom
     ) {
 
@@ -205,26 +174,40 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
+        Row(
+            Modifier
                 .weight(1f)
                 .background(myTheme.topListBg)
-                .padding(start = 10.dp, end = 10.dp),
-            reverseLayout = true,
-            userScrollEnabled = true,
+                .padding(start = 10.dp, end = 10.dp)
         ) {
-            itemsIndexed(viewModel.results) { index, item ->
-                Box(
-                    modifier = Modifier.combinedClickable(
-                        onClick = {
-                            viewModel.inputText.value = item.input
-                            viewModel.resultText.value = item.result
-                        },
-                        onLongClick = { openDialog.value = index })
-                ) {
-                    ItemText(input = item.input, result = item.result)
+            LazyColumn(
+                Modifier.weight(1f),
+                reverseLayout = true,
+                userScrollEnabled = true,
+            ) {
+                itemsIndexed(viewModel.results) { index, item ->
+                    Box(
+                        modifier = Modifier.combinedClickable(
+                            onClick = {},
+                            onLongClick = { openDialog.value = index })
+                    ) {
+                        ItemText(input = item.input, result = item.result)
+                    }
                 }
             }
+
+            Divider(
+                Modifier
+                    .alpha(process)
+                    .padding(start = 10.dp)
+                    .width(1.dp)
+                    .fillMaxHeight(),
+                color = Color.Gray
+            )
+
+            TopBtn(
+                Modifier.width(80.dp * process)
+            )
         }
 
         Box(
@@ -250,3 +233,56 @@ fun TextBox(process: Float, onClick: () -> Unit) {
     }
 }
 
+@Composable
+fun DeleteDialog(openDialog: MutableState<Int>) {
+    val viewModel = viewModel<DateViewModel>()
+    AlertDialog(
+        backgroundColor = myTheme.bottomBg,
+        onDismissRequest = { openDialog.value = -1 },
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = null,
+                    modifier = Modifier.size(25.dp),
+                    tint = Color.Red
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(
+                    text = "是否决定删除该记录",
+                    color = myTheme.textColor,
+                    style = MaterialTheme.typography.h6
+                )
+            }
+        }, confirmButton = {
+            TextButton(
+                onClick = {
+                    viewModel.results.removeAt(openDialog.value)
+                    openDialog.value = -1
+                },
+            ) { Text("确认", fontWeight = FontWeight.W700, color = myTheme.textColor) }
+        }, dismissButton = {
+            TextButton(onClick = { openDialog.value = -1 }) {
+                Text("取消", fontWeight = FontWeight.W700, color = myTheme.textColor)
+            }
+        })
+
+}
+
+val columns = listOf("D", "÷", "×", "-", "+", "=")
+
+@Composable
+fun TopBtn(modifier: Modifier = Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.End) {
+        columns.forEach {
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+                    .weight(1f)
+                    .then(if (isPortrait) Modifier.aspectRatio(1f) else Modifier)
+            ) {
+                ItemBtn(text = it)
+            }
+        }
+    }
+}
