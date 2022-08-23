@@ -5,24 +5,26 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SwipeableDefaults.resistanceConfig
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -131,6 +133,39 @@ fun TopResultView() {
 @Composable
 fun TextBox(process: Float, onClick: () -> Unit) {
     val viewModel = viewModel<DateViewModel>()
+    val openDialog = remember { mutableStateOf(-1) }
+    if (openDialog.value != -1) {
+        AlertDialog(
+            backgroundColor = myTheme.topBg,
+            onDismissRequest = { openDialog.value = -1 },
+            title = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = null,
+                        modifier = Modifier.size(25.dp),
+                        tint = Color.Red
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        text = "是否决定删除该记录",
+                        color = myTheme.textColor,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+            }, confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.results.removeAt(openDialog.value)
+                        openDialog.value = -1
+                    },
+                ) { Text("确认", fontWeight = FontWeight.W700, color = myTheme.textColor) }
+            }, dismissButton = {
+                TextButton(onClick = { openDialog.value = -1 }) {
+                    Text("取消", fontWeight = FontWeight.W700, color = myTheme.textColor)
+                }
+            })
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -178,14 +213,15 @@ fun TextBox(process: Float, onClick: () -> Unit) {
             reverseLayout = true,
             userScrollEnabled = true,
         ) {
-            items(viewModel.results) { item ->
+            itemsIndexed(viewModel.results) { index, item ->
                 Box(
-                    modifier = Modifier.clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                        viewModel.inputText.value = item.input
-                        viewModel.resultText.value = item.result
-                    }) {
+                    modifier = Modifier.combinedClickable(
+                        onClick = {
+                            viewModel.inputText.value = item.input
+                            viewModel.resultText.value = item.result
+                        },
+                        onLongClick = { openDialog.value = index })
+                ) {
                     ItemText(input = item.input, result = item.result)
                 }
             }
