@@ -13,8 +13,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apkfuns.logutils.LogUtils
@@ -27,7 +28,7 @@ import com.jyn.composecalculator.ui.theme.myTheme
 const val BOTTOM_FRACTION = 0.67f
 var isPortrait = false //横竖屏
 var isDark = false //暗黑模式
-var statusBarHeight = 0
+var statusBarHeight = 25.dp //状态栏高度
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +40,12 @@ class MainActivity : ComponentActivity() {
             ComposeCalculatorTheme {
                 //是否是竖屏
                 isPortrait = LocalConfiguration.current.orientation == ORIENTATION_PORTRAIT
-                val viewModel = viewModel<DateViewModel>()
-                LogUtils.tag("viewModel").i("MainActivity viewModel : $viewModel")
+
+                LocalDensity.current.run {
+                    statusBarHeight = resources.getDimensionPixelSize(
+                        resources.getIdentifier("status_bar_height", "dimen", "android")
+                    ).toDp()
+                }
 
                 ContentView()
 
@@ -52,17 +57,6 @@ class MainActivity : ComponentActivity() {
                         darkIcons = !useDarkIcons
                     )
                 }
-
-                with(LocalContext.current) {
-                    val size: Int = resources.getDimensionPixelSize(
-                        resources.getIdentifier(
-                            "status_bar_height",
-                            "dimen",
-                            "android"
-                        )
-                    )
-                }
-                LogUtils.tag("main").i("statusBarHeight:$statusBarHeight")
             }
         }
     }
